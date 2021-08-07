@@ -1,0 +1,99 @@
+
+{
+// names is a list of integers
+  "names": [
+    "940",
+    "941",
+    "943"
+  ],
+
+
+// metadata is a list of dictionaries 
+// I named this "peopledata"
+
+  "metadata": [
+
+// This is peopledata[0] 
+    {
+      "id": 940,
+      "ethnicity": "Caucasian",
+      "gender": "F",
+      "age": 24,
+      "location": "Beaufort/NC",
+      "bbtype": "I",
+      "wfreq": 2
+    },
+
+// This is peopledata[1] 
+    {
+      "id": 941,
+      "ethnicity": "Caucasian/Midleastern",
+      "gender": "F",
+      "age": 34,
+      "location": "Chicago/IL",
+      "bbtype": "I",
+      "wfreq": 1
+    }
+  ],
+
+
+// samples is a list of dictionaries
+
+// I named this "sampledata"
+
+  "samples": [
+
+    // this is sampledata[0]
+    {
+      "id": "940", // id is an integer 
+      "otu_ids": [ // otu_uds is a list of integers 
+        1167,
+        2859,
+        482
+      ],
+      "sample_values": [ // otu_uds is a list of integers 
+        163,
+        126,
+        113
+      ],
+      "otu_labels": [ // otu_uds is a list of strings
+        "Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Porphyromonadaceae;Porphyromonas",
+        "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Peptoniphilus",
+        "Bacteria",
+      ]
+    },
+
+
+    // this is sampledata[1]
+    {
+      "id": "941",
+      "otu_ids": [
+        2722,
+        944,
+        2419
+      ],
+      "sample_values": [
+        194,
+        178,
+        162
+      ],
+      "otu_labels": [
+        "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Finegoldia",
+        "Bacteria;Actinobacteria;Actinobacteria;Actinomycetales;Corynebacteriaceae;Corynebacterium",
+        "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Anaerococcus"
+      ]
+    },
+    {
+      "id": "943",
+      "otu_ids": [
+        1795
+      ],
+      "sample_values": [
+        2
+      ],
+      "otu_labels": [
+        "Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus"
+      ]
+    }
+  ]
+}

@@ -25,15 +25,21 @@ var selection='';
 var person='';
 
 // Create function that will run when a new value chosen on the dropdown menu
+// Basically the entire script will run inside this function
 function optionChanged(value){
 
+  // Get the selection
   var selection = value;
   console.log('selection is ', selection);
+
+  // ====================
+  // === DEMOGRAPHICS ===
+  // ====================
 
   // Identify demographics of person who matches the chosen ID
   person = peopledata.filter(function (i){
     return i.id === parseInt(selection);
-  })[0]; // <--- Add [0] because person is a 1 item array for some reason
+  })[0];        // <--- Add [0] because person is a 1 item array for some reason
   console.log('person is ', person);
   
   // Clear the demographic panel...
@@ -42,26 +48,100 @@ function optionChanged(value){
   d3.entries(person).forEach(function(i){
     demoPanel.append('div')
       .attr('class', 'panel-row')
-      .text(i.key + ' ........ ' + i.value)
+      .text(i.key + ': ' + i.value)
   });
 
+  // ===================
+  // === SAMPLE DATA ===
+  // ===================
+  
+  // Identify demographics of person who matches the chosen ID
+  selectedSample = sampledata.filter(function (i){
+    return i.id === selection; // id is a string in sample data
+  })[0];          // <--- Add [0] because it's 1 item array
+
+
+  // assign sample data to chart variables for later use
+  var selectedIDs = selectedSample.otu_ids;
+  var selectedValues = selectedSample.sample_values;
+  var selectedLabels = selectedSample.otu_labels;
 
 
 
-};
-
-
-
-
-
-
+// ============================
+// === Horizontal Bar Chart ===
+// ============================
+  
 // horizontal bar chart of top 10 OTUs in an individual
   var horizbar = [{
     type: 'bar',
-    x: [1795, 3312, 1399],
-    y: ["Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus", "Bacteria;Firmicutes;Clostridia;Clostridiales;Veillonellaceae;Veillonella", "Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus"],
-    orientation: 'h'
+    y: selectedIDs.slice(0,10).map(e => " OTU "+e+' '),
+    x: selectedValues.slice(0,10),
+    orientation: 'h',
+    text: selectedLabels.slice(0,10)
   }];
+  var horizbarLayout = {
+    title: 'Top 10 OTUs',
+    xaxis: {
+      title: 'Hover to see OTU names!'
+    }
+  };
+  Plotly.newPlot('bar', horizbar, horizbarLayout);
   
-  Plotly.newPlot('bar', horizbar);
-  
+
+// =====================
+// === Washing Gauge ===
+// =====================
+
+var gaugedata = [{
+    domain: { x: [0, 1], y: [0, 1] },
+    value: person.wfreq, // set value to wfreq from metadata
+    title: { text: "Wash Frequency per week" },
+    type: "indicator",
+    mode: "gauge+number",
+    gauge: {
+      axis: { range: [null, 9] },
+      steps: [{ range: [0, 9], color: "lightgray" }]
+      }
+}];
+var gaugelayout = { width: 440, height: 300, margin: { t: 0, b: 0 } };
+Plotly.newPlot('gauge', gaugedata, gaugelayout);
+
+
+
+// ====================
+// === Bubble Chart ===
+// ====================
+
+var bubbledata = [{ // data must be an array !!!!!!
+  x: selectedIDs,
+  y: selectedValues,
+  text: selectedLabels,
+  mode: 'markers',
+  marker: {
+    color: selectedIDs,
+    size: selectedValues,
+    sizeref: 2.0 * Math.max(selectedValues) / (50**2)
+  }
+}];
+
+var bubblelayout = {
+  title: 'Bubble Chart Hover Text',
+  showlegend: false,
+  // height: 500,
+  // width: 600,
+  xaxis: {
+    title: 'OTU ID',
+    range: [0, d3.max(selectedIDs)+500]
+  },
+  yaxis: {
+    range: [0, d3.max(selectedValues)+350]
+  }
+};
+
+Plotly.newPlot('bubble', bubbledata, bubblelayout);
+
+
+
+
+}; // end of the full page update function
